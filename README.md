@@ -5,7 +5,7 @@ curl-to-ruby is a tool to instantly convert [curl](http://curl.haxx.se) commands
 
 ### Try it
 
-**[Check it out!](https://jhawthorn.github.io/curl-to-go)** It works inside your browser.
+**[Check it out!](https://jhawthorn.github.io/curl-to-ruby)** It works inside your browser.
 
 
 ### FAQ
