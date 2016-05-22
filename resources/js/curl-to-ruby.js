@@ -155,6 +155,8 @@ function curlToGo(curl) {
 		else if (cmd._.length > 1)
 			relevant.url = cmd._[1]; // position 1 because index 0 is the curl command itself
 
+		relevant.url = fixUrl(relevant.url);
+
 		// gather the headers together
 		if (cmd.H)
 			relevant.headers = relevant.headers.concat(cmd.H);
@@ -215,6 +217,14 @@ function curlToGo(curl) {
 			relevant.method = "GET";
 
 		return relevant;
+	}
+
+	function fixUrl(url) {
+		if(url && url.indexOf("http") != 0) {
+			return "http://" +  url;
+		} else {
+			return url;
+		}
 	}
 
 	function toTitleCase(str) {
