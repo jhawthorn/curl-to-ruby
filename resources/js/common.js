@@ -1,6 +1,6 @@
 $(function()
 {
-	var emptyOutputMsg = "Go code will appear here";
+	var emptyOutputMsg = "Ruby code will appear here";
 	var formattedEmptyOutputMsg = '<span style="color: #777;">'+emptyOutputMsg+'</span>';
 
 	// Hides placeholder text
