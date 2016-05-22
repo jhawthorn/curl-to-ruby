@@ -8,6 +8,7 @@
 */
 
 function curlToRuby(curl) {
+	var prelude = "require 'net/http'\nrequire 'uri'\n\n";
 
 	// List of curl flags that are boolean typed; this helps with parsing
 	// a command like `curl -abc value` to know whether 'value' belongs to '-c'
@@ -67,7 +68,7 @@ function curlToRuby(curl) {
 	function renderSimple(req) {
 		var ruby = "";
 
-		ruby += "require 'net/http'\nrequire 'uri'\n\n";
+		ruby += prelude;
 		ruby += 'uri = URI.parse("' + rubyEsc(req.url) + '")\n';
 		ruby += 'response = Net::HTTP.get_response(uri)\n';
 
@@ -90,7 +91,7 @@ function curlToRuby(curl) {
 
 		var ruby = "";
 
-		ruby += "require 'net/http'\nrequire 'uri'\n\n";
+		ruby += prelude;
 		ruby += 'uri = URI.parse("' + rubyEsc(req.url) + '")\n';
 
 		if (httpMethods[req.method]) {
