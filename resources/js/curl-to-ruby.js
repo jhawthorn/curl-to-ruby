@@ -9,6 +9,9 @@
 
 function curlToRuby(curl) {
 	var prelude = "require 'net/http'\nrequire 'uri'\n\n";
+	var coda = "\n" +
+		"# response.status\n" +
+		"# response.body\n";
 
 	// List of curl flags that are boolean typed; this helps with parsing
 	// a command like `curl -abc value` to know whether 'value' belongs to '-c'
@@ -72,7 +75,7 @@ function curlToRuby(curl) {
 		ruby += 'uri = URI.parse("' + rubyEsc(req.url) + '")\n';
 		ruby += 'response = Net::HTTP.get_response(uri)\n';
 
-		return ruby;
+		return ruby + coda;
 	}
 
 	// renderComplex renders Go code that requires making a http.Request.
@@ -143,11 +146,7 @@ function curlToRuby(curl) {
 		ruby += '  http.request(request)\n'
 		ruby += 'end\n'
 
-		ruby += "\n"
-		ruby += "# response.status\n"
-		ruby += "# response.body\n"
-
-		return ruby;
+		return ruby + coda;
 	}
 
 	// extractRelevantPieces returns an object with relevant pieces
