@@ -7,7 +7,7 @@
 	https://github.com/mholt/curl-to-go
 */
 
-function curlToGo(curl) {
+function curlToRuby(curl) {
 
 	// List of curl flags that are boolean typed; this helps with parsing
 	// a command like `curl -abc value` to know whether 'value' belongs to '-c'

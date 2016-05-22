@@ -26,7 +26,7 @@ $(function()
 		}
 
 		try {
-			var output = curlToGo(input);
+			var output = curlToRuby(input);
 			if (output) {
 				var coloredOutput = hljs.highlight("ruby", output);
 				$('#output').html(coloredOutput.value);
