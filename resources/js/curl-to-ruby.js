@@ -68,6 +68,8 @@ function curlToRuby(curl) {
 			headers[toTitleCase(name)] = value;
 		}
 
+		delete headers["Accept-Encoding"];
+
 		var ruby = "";
 
 		ruby += "require 'net/http'\nrequire 'uri'\n\n";
