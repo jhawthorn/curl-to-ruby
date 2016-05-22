@@ -29,6 +29,24 @@ function curlToRuby(curl) {
 		'tlsv1.0', 'tlsv1.1', 'tlsv1.2', 'tr-encoding', 'trace-time', 'v', 'verbose', 'xattr',
 		'h', 'help', 'M', 'manual', 'V', 'version'];
 
+	var httpMethods = {
+	 'COPY':      'Copy',
+	 'DELETE':    'Delete',
+	 'GET':       'Get',
+	 'HEAD':      'Head',
+	 'LOCK':      'Lock',
+	 'MKCOL':     'Mkcol',
+	 'MoVE':      'Move',
+	 'OPTIONS':   'Options',
+	 'PATCH':     'Patch',
+	 'POST':      'Post',
+	 'PROPFIND':  'Propfind',
+	 'PROPPATCH': 'Proppatch',
+	 'PUT':       'Put',
+	 'TRACE':     'Trace',
+	 'UNLOCK':    'Unlock'
+	};
+
 	if (!curl.trim())
 		return;
 	var cmd = parseCommand(curl, { boolFlags: boolOptions });
@@ -75,17 +93,11 @@ function curlToRuby(curl) {
 		ruby += "require 'net/http'\nrequire 'uri'\n\n";
 		ruby += 'uri = URI.parse("' + rubyEsc(req.url) + '")\n';
 
-		var method = req.method;
-		if (method == "GET")
-			ruby += 'request = Net::HTTP::Get.new(uri)\n';
-		else if (method == "POST")
-			ruby += 'request = Net::HTTP::Post.new(uri)\n';
-		else if (method == "PUT")
-			ruby += 'request = Net::HTTP::Put.new(uri)\n';
-		else if (method == "HEAD")
-			ruby += 'request = Net::HTTP::Head.new(uri)\n';
-		else
-			ruby += "request = Net::HTTPGenericRequest.new('" + rubyEsc(method) + "', nil, nil, uri)"
+		if (httpMethods[req.method]) {
+			ruby += 'request = Net::HTTP::'+httpMethods[req.method]+'.new(uri)\n';
+		} else {
+			ruby += 'request = Net::HTTPGenericRequest.new("' + rubyEsc(req.method) + '", false, false, uri)\n';
+		}
 
 		// set basic auth
 		if (req.basicauth) {
