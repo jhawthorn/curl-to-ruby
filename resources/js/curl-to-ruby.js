@@ -38,24 +38,22 @@ function curlToRuby(curl) {
 
 	var req = extractRelevantPieces(cmd);
 
-	return renderComplex(req);
-	//if (req.headers.length == 0 && !req.data.ascii && !req.data.files && !req.basicauth) {
-	//	return promo+"\n"+renderSimple(req.method, req.url);
-	//} else {
-	//	return promo+"\n\n"+renderComplex(req);
-	//}
+	if (req.headers.length == 0 && req.method == "GET" && !req.data.ascii && !req.data.files && !req.basicauth) {
+		return renderSimple(req);
+	} else {
+	 	return renderComplex(req);
+	}
 
 
 	// renderSimple renders a simple HTTP request using net/http convenience methods
-	function renderSimple(method, url) {
-		if (method == "GET")
-			return 'resp, err := http.Get('+goExpandEnv(url)+')\n'+err+deferClose;
-		else if (method == "POST")
-			return 'resp, err := http.Post('+goExpandEnv(url)+', "", nil)\n'+err+deferClose;
-		else if (method == "HEAD")
-			return 'resp, err := http.Head('+goExpandEnv(url)+')\n'+err+deferClose;
-		else
-			return 'req, err := http.NewRequest('+goExpandEnv(method)+', '+goExpandEnv(url)+', nil)\n'+err+'resp, err := http.DefaultClient.Do(req)\n'+err+deferClose;
+	function renderSimple(req) {
+		var ruby = "";
+
+		ruby += "require 'net/http'\nrequire 'uri'\n\n";
+		ruby += 'uri = URI.parse("' + rubyEsc(req.url) + '")\n';
+		ruby += 'response = Net::HTTP.get_response(uri)\n';
+
+		return ruby;
 	}
 
 	// renderComplex renders Go code that requires making a http.Request.
