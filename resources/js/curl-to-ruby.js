@@ -74,8 +74,6 @@ function curlToGo(curl) {
 
 		ruby += "require 'net/http'\nrequire 'uri'\n\n";
 		ruby += 'uri = URI.parse("' + rubyEsc(req.url) + '")\n';
-		ruby += 'http = Net::HTTP.new(uri.host, uri.port)\n';
-		ruby += 'http.use_ssl = (uri.scheme == "https")\n';
 
 		var method = req.method;
 		if (method == "GET")
@@ -127,7 +125,12 @@ function curlToGo(curl) {
 			}
 		}
 
-		ruby += "\nresponse = http.request(request)\n"
+		ruby += '\n'
+		ruby += 'response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == "https") do |http|\n'
+		ruby += '  http.request(request)\n'
+		ruby += 'end\n'
+
+		ruby += "\n"
 		ruby += "# response.status\n"
 		ruby += "# response.body\n"
 
