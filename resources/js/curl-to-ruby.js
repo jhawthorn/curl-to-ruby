@@ -115,11 +115,11 @@ function curlToRuby(curl) {
 			for (var i = 0; i < req.data.files.length; i++) {
 				var thisVarName = (req.data.files.length > 1 ? varName+(i+1) : varName);
 				ruby += thisVarName + ' = "' + rubyEsc(req.data.files[i]) + '"\n'
-				ruby += 'request.body << "--#{BOUNDARY}\\r\\n"\n';
+				ruby += 'request.body << "--#{boundary}\\r\\n"\n';
 				ruby += 'request.body << "Content-Disposition: form-data; name=\\"datafile\\"; filename=\\"#{File.basename('+thisVarName+')}\\"\\r\\n"\n';
 				ruby += 'request.body << "\\r\\n"\n';
-				ruby += 'request.body << File.read(file)\n';
-				ruby += 'request.body << "\\r\\n--#{BOUNDARY}--\\r\\n"\n';
+				ruby += 'request.body << File.read('+thisVarName+')\n';
+				ruby += 'request.body << "\\r\\n--#{boundary}--\\r\\n"\n';
 			}
 		}
 
