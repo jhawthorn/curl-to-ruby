@@ -220,7 +220,7 @@ function curlToRuby(curl) {
 	}
 
 	function fixUrl(url) {
-		if(url && url.indexOf("http") != 0) {
+		if(url && !(new RegExp("^https?://", "i")).test(url)) {
 			return "http://" +  url;
 		} else {
 			return url;
