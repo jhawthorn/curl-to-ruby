@@ -79,15 +79,15 @@ function curlToGo(curl) {
 
 		var method = req.method;
 		if (method == "GET")
-			ruby += 'request = Net::HTTP::Get.new(uri.request_uri)\n';
+			ruby += 'request = Net::HTTP::Get.new(uri)\n';
 		else if (method == "POST")
-			ruby += 'request = Net::HTTP::Post.new(uri.request_uri)\n';
+			ruby += 'request = Net::HTTP::Post.new(uri)\n';
 		else if (method == "PUT")
-			ruby += 'request = Net::HTTP::Put.new(uri.request_uri)\n';
+			ruby += 'request = Net::HTTP::Put.new(uri)\n';
 		else if (method == "HEAD")
-			ruby += 'request = Net::HTTP::Head.new(uri.request_uri)\n';
+			ruby += 'request = Net::HTTP::Head.new(uri)\n';
 		else
-			ruby += "request = Net::HTTPGenericRequest.new('" + rubyEsc(method) + "', nil, nil, uri.request_url)"
+			ruby += "request = Net::HTTPGenericRequest.new('" + rubyEsc(method) + "', nil, nil, uri)"
 
 		// set basic auth
 		if (req.basicauth) {
