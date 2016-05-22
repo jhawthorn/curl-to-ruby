@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>curl-to-Go: Convert curl commands to Go code</title>
+		<title>curl-to-ruby: Convert curl commands to ruby's net/http</title>
 		<meta charset="utf-8">
 		<script src="resources/js/jquery.min.js"></script>
 		<script src="resources/js/highlight.pack.js"></script>
@@ -14,11 +14,14 @@
 	<body>
 
 		<header>
-			<h1>curl-to-Go</h1>
-			<h2>Instantly convert <a href="http://curl.haxx.se/">curl</a> commands to <a href="https://golang.org/">Go</a> code</h2>
+			<h1>curl-to-ruby</h1>
+			<h2>Instantly convert <a href="http://curl.haxx.se/">curl</a> commands to <a href="https://www.ruby-lang.org/">Ruby</a>'s <a href="http://ruby-doc.org/stdlib-2.1.1/libdoc/net/http/rdoc/Net/HTTP.html">net/http</a></h2>
 
 			<p>
-				This tool turns a curl command into Go code. (To do the reverse, check out <a href="https://github.com/sethgrid/gencurl">sethgrid/gencurl</a>.) Currently, it knows the following options: -d/--data, -H/--header, -I/--head, -u/--user, --url, and -X/--request. It also understands JSON content types. As always, be sure to <code>go fmt</code> your code and pay attention to imports. There's probably bugs; please <a href="https://github.com/mholt/curl-to-go">contribute on GitHub</a>! For a quick way to generate a Go struct from JSON, see <a href="https://mholt.github.io/json-to-go">JSON-to-Go</a>.
+				This tool turns a curl command into ruby code using net/http. Currently, it knows the following options: -d/--data, -H/--header, -I/--head, -u/--user, --url, and -X/--request.
+			</p>
+			<p>
+				Based on <a href="https://mholt.github.io/curl-to-go">curl-to-go</a>.
 			</p>
 
 			<p class="examples">
@@ -33,11 +36,5 @@
 			<textarea id="input" rows="4" placeholder="Paste curl here"></textarea>
 			<div id="output"></div>
 		</main>
-
-
-		<footer>
-			&copy; 2016 Matt Holt - <a href="https://github.com/mholt/curl-to-go">View on GitHub</a>
-		</footer>
-
 	</body>
 </html>
