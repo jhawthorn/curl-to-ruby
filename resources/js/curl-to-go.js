@@ -41,11 +41,12 @@ function curlToGo(curl) {
 
 	var req = extractRelevantPieces(cmd);
 
-	if (req.headers.length == 0 && !req.data.ascii && !req.data.files && !req.basicauth) {
-		return promo+"\n"+renderSimple(req.method, req.url);
-	} else {
-		return promo+"\n\n"+renderComplex(req);
-	}
+	return renderComplex(req);
+	//if (req.headers.length == 0 && !req.data.ascii && !req.data.files && !req.basicauth) {
+	//	return promo+"\n"+renderSimple(req.method, req.url);
+	//} else {
+	//	return promo+"\n\n"+renderComplex(req);
+	//}
 
 
 	// renderSimple renders a simple HTTP request using net/http convenience methods
@@ -62,8 +63,6 @@ function curlToGo(curl) {
 
 	// renderComplex renders Go code that requires making a http.Request.
 	function renderComplex(req) {
-		var go = "";
-
 		// First, figure out the headers
 		var headers = {};
 		for (var i = 0; i < req.headers.length; i++) {
@@ -74,80 +73,68 @@ function curlToGo(curl) {
 			headers[toTitleCase(name)] = value;
 		}
 
-		// load body data
-		// KNOWN ISSUE: -d and --data are treated like --data-binary in
-		// that we don't strip out carriage returns and newlines.
-		var defaultPayloadVar = "body";
-		if (!req.data.ascii && !req.data.files) {
-			// no data; this is easy
-			go += 'req, err := http.NewRequest("'+req.method+'", '+goExpandEnv(req.url)+', nil)\n'+err;
-		} else {
-			var ioReaders = [];
+		var ruby = "";
 
-			// if there's text data...
-			if (req.data.ascii) {
-				var stringBody = function() {
-					go += defaultPayloadVar+' := strings.NewReader(`'+req.data.ascii+'`)\n'
-					ioReaders.push(defaultPayloadVar);
-				}
+		ruby += "require 'net/http'\nrequire 'uri'\n\n";
+		ruby += 'uri = URI.parse("' + rubyEsc(req.url) + '")\n';
+		ruby += 'http = Net::HTTP.new(uri.host, uri.port)\n';
+		ruby += 'http.use_ssl = (uri.scheme == "https")\n';
 
-				if (headers["Content-Type"] && headers["Content-Type"].indexOf("json") > -1) {
-					// create a struct for the JSON
-					var result = jsonToGo(req.data.ascii, "Payload");
-					if (result.error)
-						stringBody(); // not valid JSON, so just treat as a regular string
-					else if (result.go) {
-						// valid JSON, so create a struct to hold it
-						go += result.go+'\n\ndata := Payload {\n\t// fill struct\n}\n';
-						go += 'payloadBytes, err := json.Marshal(data)\n'+err;
-						go += defaultPayloadVar+' := bytes.NewReader(payloadBytes)\n\n';
-					}
-				} else {
-					// not a json Content-Type, so treat as string
-					stringBody();
-				}
-			}
-
-			// if file data...
-			if (req.data.files && req.data.files.length > 0) {
-				var varName = "f";
-				for (var i = 0; i < req.data.files.length; i++) {
-					var thisVarName = (req.data.files.length > 1 ? varName+(i+1) : varName);
-					go += thisVarName+', err := os.Open('+goExpandEnv(req.data.files[i])+')\n'+err;
-					go += 'defer '+thisVarName+'.Close()\n';
-					ioReaders.push(thisVarName);
-				}
-			}
-
-			// render go code to put all the data in the body, concatenating if necessary
-			var payloadVar = defaultPayloadVar;
-			if (ioReaders.length > 0)
-				payloadVar = ioReaders[0];
-			if (ioReaders.length > 1) {
-				payloadVar = "payload";
-				// KNOWN ISSUE: The way we separate file and ascii data values
-				// loses the order between them... our code above just puts the
-				// ascii values first, followed by the files.
-				go += 'payload := io.MultiReader('+ioReaders.join(", ")+')\n';
-			}
-			go += 'req, err := http.NewRequest("'+req.method+'", '+goExpandEnv(req.url)+', '+payloadVar+')\n'+err;
-		}
+		var method = req.method;
+		if (method == "GET")
+			ruby += 'request = Net::HTTP::Get.new(uri.request_uri)\n';
+		else if (method == "POST")
+			ruby += 'request = Net::HTTP::Post.new(uri.request_uri)\n';
+		else if (method == "PUT")
+			ruby += 'request = Net::HTTP::Put.new(uri.request_uri)\n';
+		else if (method == "HEAD")
+			ruby += 'request = Net::HTTP::Head.new(uri.request_uri)\n';
+		else
+			ruby += "request = Net::HTTPGenericRequest.new('" + rubyEsc(method) + "', nil, nil, uri.request_url)"
 
 		// set basic auth
 		if (req.basicauth) {
-			go += 'req.SetBasicAuth('+goExpandEnv(req.basicauth.user)+', '+goExpandEnv(req.basicauth.pass)+')\n';
+			ruby += 'request.basic_auth("'+rubyEsc(req.basicauth.user)+'", "'+rubyEsc(req.basicauth.pass)+'")\n';
+		}
+
+		if (headers["Content-Type"]) {
+			ruby += 'request.content_type = "' + rubyEsc(headers["Content-Type"]) + '"\n';
+			delete(headers["Content-Type"]);
 		}
 
 		// set headers
 		for (var name in headers) {
-			go += 'req.Header.Set('+goExpandEnv(name)+', '+goExpandEnv(headers[name])+')\n';
+			ruby += 'request["'+rubyEsc(name)+'"] = "'+rubyEsc(headers[name])+'"\n';
 		}
 
-		// execute request
-		go += "\nresp, err := http.DefaultClient.Do(req)\n";
-		go += err+deferClose;
+		if (req.data.ascii) {
+			ruby += 'request.body = "' + rubyEsc(req.data.ascii) + '"\n';
+		}
 
-		return go;
+		if (req.data.files && req.data.files.length > 0) {
+			if (!req.data.ascii) {
+				ruby += 'request.body = ""\n';
+			}
+
+			ruby += 'boundary = "---------MultipartUpload"\n';
+
+			var varName = "file";
+			for (var i = 0; i < req.data.files.length; i++) {
+				var thisVarName = (req.data.files.length > 1 ? varName+(i+1) : varName);
+				ruby += thisVarName + ' = "' + rubyEsc(req.data.files[i]) + '"\n'
+				ruby += 'request.body << "--#{BOUNDARY}\\r\\n"\n';
+				ruby += 'request.body << "Content-Disposition: form-data; name=\\"datafile\\"; filename=\\"#{File.basename('+thisVarName+')}\\"\\r\\n"\n';
+				ruby += 'request.body << "\\r\\n"\n';
+				ruby += 'request.body << File.read(file)\n';
+				ruby += 'request.body << "\\r\\n--#{BOUNDARY}--\\r\\n"\n';
+			}
+		}
+
+		ruby += "\nresponse = http.request(request)\n"
+		ruby += "# response.status\n"
+		ruby += "# response.body\n"
+
+		return ruby;
 	}
 
 	// extractRelevantPieces returns an object with relevant pieces
@@ -236,31 +223,7 @@ function curlToGo(curl) {
 		});
 	}
 
-	// goExpandEnv adds surrounding quotes around s to make it a Go string,
-	// escaping any characters as needed. It checks to see if s has an
-	// environment variable in it. If so, it returns s wrapped in a Go
-	// function that expands the environment variable. Otherwise, it
-	// returns s wrapped in quotes and escaped for use in Go strings.
-	// s should not already be escaped! This function always returns a Go
-	// string value.
-	function goExpandEnv(s) {
-		var pos = s.indexOf("$");
-		if (pos > -1)
-		{
-			if (pos > 0 && s[pos-1] == '\\') {
-				// The $ is escaped, so strip the escaping backslash
-				s = s.substr(0, pos-1) + s.substr(pos);
-			} else {
-				// $ is not escaped, so treat it as an env variable
-				return 'os.ExpandEnv("'+goEsc(s)+'")';
-			}
-		}
-		return '"'+goEsc(s)+'"';
-	}
-
-	// goEsc escapes characters in s so that it is safe to use s in
-	// a "quoted string" in a Go program
-	function goEsc(s) {
+	function rubyEsc(s) {
 		return s.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
 	}
 }
