@@ -40,6 +40,10 @@ class TestCurlToGo < Minitest::Test
     assert_curl_eq "/", "-d foo=bar"
   end
 
+  def test_data_file_reference
+    assert_curl_eq "/", "-d @README.md"
+  end
+
   def assert_curl_eq(path, curl_args="")
     curl_req = capture_http do |url|
       system "curl -s -o /dev/null #{url}#{path} #{curl_args}"
@@ -67,6 +71,7 @@ class TestCurlToGo < Minitest::Test
     headers.delete("accept-encoding")
     headers.delete("user-agent")
     headers.delete("host")
+    headers.delete("expect")
     headers
   end
 
