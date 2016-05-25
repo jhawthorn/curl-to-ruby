@@ -1,26 +1,14 @@
-$(function()
-{
+import curlToRuby from "./curlToRuby";
+import $ from "jquery";
+import hljs from "highlight.js";
+
+$(function(){
 	var emptyOutputMsg = "Ruby code will appear here";
 	var formattedEmptyOutputMsg = '<span style="color: #777;">'+emptyOutputMsg+'</span>';
 
-	// Hides placeholder text
-	$('#input').on('focus', function() {
-		if (!$(this).val())
-			$('#output').html(formattedEmptyOutputMsg);
-	});
-
-	// Shows placeholder text
-	$('#input').on('blur', function() {
-		if (!$(this).val())
-			$('#output').html(formattedEmptyOutputMsg);
-	}).blur();
-
-	// Automatically do the conversion
-	$('#input').keyup(function()
-	{
+	function updateOutput() {
 		var input = $(this).val();
-		if (!input)
-		{
+		if (!input) {
 			$('#output').html(formattedEmptyOutputMsg);
 			return;
 		}
@@ -32,21 +20,22 @@ $(function()
 				$('#output').html(coloredOutput.value);
 			}
 		} catch (e) {
-			$('#output').html('<span class="clr-red">'+e+'</span>');
+			console.log(e);
+		 	$('#output').html('<span class="clr-red">'+e+'</span>');
 		}
-	});
+	}
+	updateOutput();
+
+	// Update placeholder text
+	$('#input').on('focus, blur, keyup', updateOutput);
 
 	// Highlights the output for the user
-	$('#output').click(function()
-	{
-		if (document.selection)
-		{
+	$('#output').click(function() {
+		if (document.selection) {
 			var range = document.body.createTextRange();
 			range.moveToElementText(this);
 			range.select();
-		}
-		else if (window.getSelection)
-		{
+		} else if (window.getSelection) {
 			var range = document.createRange();
 			range.selectNode(this);
 			window.getSelection().addRange(range);

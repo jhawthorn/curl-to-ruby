@@ -1,0 +1,34 @@
+{
+  "name": "curl-to-ruby",
+  "version": "1.0.0",
+  "private": true,
+  "description": "curl-to-ruby ============",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "webpack --watch --colors --progress",
+    "compile": "webpack --no-colors --optimize-minimize --optimize-dedupe --optimize-occurence-order",
+    "eslint": "eslint src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jhawthorn/curl-to-ruby.git"
+  },
+  "author": "John Hawthorn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jhawthorn/curl-to-ruby/issues"
+  },
+  "homepage": "https://github.com/jhawthorn/curl-to-ruby#readme",
+  "dependencies": {
+    "babel-core": "^6.9.0",
+    "babel-loader": "^6.2.4",
+    "babel-polyfill": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "highlight.js": "^9.4.0",
+    "jquery": "^2.2.4",
+    "webpack": "^1.13.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "^6.0.4"
+  }
+}

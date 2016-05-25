@@ -7,7 +7,7 @@
 	https://github.com/mholt/curl-to-go
 */
 
-function curlToRuby(curl) {
+export default function curlToRuby(curl) {
 	var prelude = "require 'net/http'\nrequire 'uri'\n\n";
 	var coda = "\n" +
 		"# response.status\n" +
