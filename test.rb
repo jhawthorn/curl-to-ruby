@@ -63,7 +63,7 @@ class TestCurlToGo < Minitest::Test
   Request = Struct.new(:verb, :path, :headers, :body)
 
   def curl_to_ruby(cmd)
-    JS_CONTEXT.call("curlToRuby", cmd)
+    JS_CONTEXT.call("curlToRuby.default", cmd)
   end
 
   def normalize_headers(headers)

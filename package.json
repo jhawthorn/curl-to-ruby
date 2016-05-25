@@ -4,7 +4,6 @@
   "private": true,
   "description": "curl-to-ruby ============",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch --colors --progress --display-error-details",
     "compile": "webpack --no-colors --optimize-minimize --optimize-dedupe --optimize-occurence-order --display-error-details",
     "eslint": "eslint src"
@@ -29,6 +28,7 @@
     "webpack": "^1.13.1"
   },
   "devDependencies": {
-    "babel-eslint": "^6.0.4"
+    "babel-eslint": "^6.0.4",
+    "expose-loader": "^0.7.1"
   }
 }

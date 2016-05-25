@@ -8,6 +8,7 @@ config.context = __dirname;
 
 config.entry = {
   default: './src/default.js',
+  "curl-to-ruby": './src/curl-to-ruby.js'
 };
 
 config.output = {
