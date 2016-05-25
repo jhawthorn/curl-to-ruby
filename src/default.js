@@ -1,6 +1,6 @@
 import curlToRuby from "./curlToRuby";
 import $ from "jquery";
-import hljs from "highlight.js";
+import hljs from "./highlight.pack.js";
 
 $(function(){
 	var emptyOutputMsg = "Ruby code will appear here";

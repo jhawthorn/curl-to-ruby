@@ -5,8 +5,8 @@
   "description": "curl-to-ruby ============",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "webpack --watch --colors --progress",
-    "compile": "webpack --no-colors --optimize-minimize --optimize-dedupe --optimize-occurence-order",
+    "watch": "webpack --watch --colors --progress --display-error-details",
+    "compile": "webpack --no-colors --optimize-minimize --optimize-dedupe --optimize-occurence-order --display-error-details",
     "eslint": "eslint src"
   },
   "repository": {
