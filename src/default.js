@@ -20,7 +20,6 @@ $(function(){
 				$('#output').html(coloredOutput.value);
 			}
 		} catch (e) {
-			console.log(e);
 		 	$('#output').html('<span class="clr-red">'+e+'</span>');
 		}
 	}
