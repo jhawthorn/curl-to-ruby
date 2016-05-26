@@ -25,6 +25,8 @@
     "babel-preset-es2015": "^6.9.0",
     "highlight.js": "^9.4.0",
     "jquery": "^2.2.4",
+    "minimist": "^1.2.0",
+    "shell-quote": "^1.6.0",
     "webpack": "^1.13.1"
   },
   "devDependencies": {

@@ -1,3 +1,6 @@
+import {parse} from "shell-quote";
+import parseArgs from "minimist";
+
 export default function parseCommand(input, options) {
 	if (typeof options === 'undefined') {
 		options = {};
@@ -7,21 +10,18 @@ export default function parseCommand(input, options) {
 	    cursor = 0,       // iterator position
 	    token = "";       // current token (word or quoted string) being built
 
+  // trim \ at and of line
+  input = input.replace(/\\\n/g, '')
+
 	// trim leading $ or # that may have been left in
 	input = input.trim();
 	if (input.length > 2 && (input[0] == '$' || input[0] == '#') && whitespace(input[1]))
 		input = input.substr(1).trim();
 
-	for (cursor = 0; cursor < input.length; cursor++) {
-		skipWhitespace();
-		if (input[cursor] == "-") {
-			flagSet();
-		} else {
-			unflagged();
-		}
-	}
+  let argv = parse(input);
+  let parsed = parseArgs(argv, {boolean: options.boolOptions});
 
-	return result;
+  return parsed;
 
 
 

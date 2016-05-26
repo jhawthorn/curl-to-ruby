@@ -8,6 +8,7 @@
 */
 
 import parseCommand from "./parseCommand";
+import wrapArray from "./wrapArray";
 
 export default function curlToRuby(curl) {
 	var prelude = "require 'net/http'\nrequire 'uri'\n\n";
@@ -155,8 +156,8 @@ export default function curlToRuby(curl) {
 		};
 
 		// prefer --url over unnamed parameter, if it exists; keep first one only
-		if (cmd.url && cmd.url.length > 0)
-			relevant.url = cmd.url[0];
+		if (cmd.url)
+			relevant.url = cmd.url;
 		else if (cmd._.length > 1)
 			relevant.url = cmd._[1]; // position 1 because index 0 is the curl command itself
 
@@ -164,24 +165,30 @@ export default function curlToRuby(curl) {
 
 		// gather the headers together
 		if (cmd.H)
-			relevant.headers = relevant.headers.concat(cmd.H);
+			relevant.headers = relevant.headers.concat(wrapArray(cmd.H));
 		if (cmd.header)
-			relevant.headers = relevant.headers.concat(cmd.header);
+			relevant.headers = relevant.headers.concat(wrapArray(cmd.header));
 
 		// set method to HEAD?
 		if (cmd.I || cmd.head)
 			relevant.method = "HEAD";
 
 		// between -X and --request, prefer the long form I guess
-		if (cmd.request && cmd.request.length > 0)
-			relevant.method = cmd.request[cmd.request.length-1].toUpperCase();
-		else if (cmd.X && cmd.X.length > 0)
-			relevant.method = cmd.X[cmd.X.length-1].toUpperCase(); // if multiple, use last (according to curl docs)
+    function setMethod(method){
+			method = wrapArray(method);
+			relevant.method = method[method.length-1].toUpperCase(); // if multiple, use last (according to curl docs)
+    }
+		if (cmd.request) {
+      setMethod(cmd.request);
+		} else if (cmd.X) {
+      setMethod(cmd.X);
+    }
 
 		// join multiple request body data, if any
 		var dataAscii = [];
 		var dataFiles = [];
 		var loadData = function(d) {
+      d = wrapArray(d);
 			if (!relevant.method)
 				relevant.method = "POST";
 			for (var i = 0; i < d.length; i++)
@@ -203,10 +210,10 @@ export default function curlToRuby(curl) {
 
 		// between -u and --user, choose the long form...
 		var basicAuthString = "";
-		if (cmd.user && cmd.user.length > 0)
-			basicAuthString = cmd.user[cmd.user.length-1];
-		else if (cmd.u && cmd.u.length > 0)
-			basicAuthString = cmd.u[cmd.u.length-1];
+		if (cmd.user)
+			basicAuthString = cmd.user;
+		else if (cmd.u)
+			basicAuthString = cmd.u;
 		var basicAuthSplit = basicAuthString.indexOf(":");
 		if (basicAuthSplit > -1) {
 			relevant.basicauth = {

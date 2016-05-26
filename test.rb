@@ -45,12 +45,14 @@ class TestCurlToGo < Minitest::Test
   end
 
   def assert_curl_eq(path, curl_args="")
+    puts "curl #{path} #{curl_args}"
     curl_req = capture_http do |url|
       system "curl -s -o /dev/null #{url}#{path} #{curl_args}"
     end
 
     ruby_req = capture_http do |url|
       ruby = curl_to_ruby("curl #{url}#{path} #{curl_args}")
+      puts ruby
       eval(ruby)
     end
 
