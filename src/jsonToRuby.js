@@ -18,15 +18,15 @@ export default function jsonToRuby(json) {
 		ret += "]";
 		return ret;
 	} else if (type == "object") {
-		let ret = "{";
+		let ret = "{\n";
 		for (var key in json) {
 			ret += jsonToRuby(key);
 			ret += " => ";
 			ret += jsonToRuby(json[key]);
-			ret += ", ";
+			ret += ",\n";
 		}
 		ret = ret.slice(0, -2);
-		ret += "}";
+		ret += "\n}";
 		return ret;
 	} else {
 		throw "Invalid JSON object";
