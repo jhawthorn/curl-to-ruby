@@ -136,7 +136,7 @@ export default function curlToRuby(curl) {
 		if (req.data.ascii) {
 			if (isJson(req.data.ascii)) {
 				let json = JSON.parse(req.data.ascii);
-				ruby += "request.body = JSON.dump(\n" + jsonToRuby(json) + "\n)\n";
+				ruby += "request.body = JSON.dump(" + jsonToRuby(json) + ")\n";
 			} else if (formUrlEncodedRegex.test(req.data.ascii)) {
 				let formData = queryString.parse(req.data.ascii);
 				ruby += "request.set_form_data(\n";

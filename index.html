@@ -3,7 +3,6 @@
 	<head>
 		<title>curl-to-ruby: Convert curl commands to ruby's net/http</title>
 		<meta charset="utf-8">
-		<script src="resources/js/default.js"></script>
 		<link rel="stylesheet" href="resources/css/color-brewer.css">
 		<link rel="stylesheet" href="resources/css/common.css">
 	</head>
@@ -25,16 +24,39 @@
 			</p>
 
 			<p class="examples">
-				<a href="javascript:" id="example1">Example 1</a> &middot;
-				<a href="javascript:" id="example2">Example 2</a> &middot;
-				<a href="javascript:" id="example3">Example 3</a> &middot;
-				<a href="javascript:" id="example4">Example 4</a> &middot;
-				<a href="javascript:" id="example5">Example 5</a>
-		</header>
+				<a href="javascript: useExample('example1')">Example 1</a> &middot;
+				<a href="javascript: useExample('example2')">Example 2</a> &middot;
+				<a href="javascript: useExample('example3')">Example 3</a> &middot;
+				<a href="javascript: useExample('example4')">Example 4</a> &middot;
+				<a href="javascript: useExample('example5')">Example 5</a>
+			</p>
+
+<script id="example1" language="text/x-shellscript">curl echoip.com</script>
+<script id="example2" language="text/x-shellscript">
+curl https://api.example.com/surprise \
+     -u banana:coconuts \
+     -d "sample data"
+</script>
+<script id="example3" language="text/x-shellscript">
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer b7d03a6947b217efb6f3ec3bd3504582" -d '{"type":"A","name":"www","data":"162.10.66.0","priority":null,"port":null,"weight":null}' "https://api.digitalocean.com/v2/domains/example.com/records"
+</script>
+<script id="example4" language="text/x-shellscript">
+curl -u "demo" -X POST -d @file1.txt -d @file2.txt https://example.com/upload
+</script>
+<script id="example5" language="text/x-shellscript">
+curl -X POST https://api.easypost.com/v2/shipments \
+     -u API_KEY: \
+     -d 'shipment[to_address][id]=adr_HrBKVA85' \
+     -d 'shipment[from_address][id]=adr_VtuTOj7o' \
+     -d 'shipment[parcel][id]=prcl_WDv2VzHp' \
+     -d 'shipment[is_return]=true' \
+     -d 'shipment[customs_info][id]=cstinfo_bl5sE20Y'
+</script>
 
 		<main>
 			<textarea id="input" rows="4" placeholder="Paste curl here"></textarea>
 			<div id="output"></div>
 		</main>
+	<script src="resources/js/default.js"></script>
 	</body>
 </html>
