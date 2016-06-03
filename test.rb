@@ -77,8 +77,11 @@ class TestCurlToGo < Minitest::Test
       body = original.body
       if headers['content-type'] == ['application/x-www-form-urlencoded']
         # May encode slightly differently
-        body = URI.decode_www_form(body)
-        headers.delete("content-length")
+        begin
+          body = URI.decode_www_form(body)
+          headers.delete("content-length")
+        rescue ArgumentError
+        end
       end
     end
 
