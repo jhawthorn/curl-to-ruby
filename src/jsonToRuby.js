@@ -1,4 +1,4 @@
-export default function jsonToRuby(json) {
+export default function jsonToRuby(json, indent = "") {
 	let type = typeof(json);
 	if (json == null) {
 		return "nil";
@@ -9,24 +9,26 @@ export default function jsonToRuby(json) {
 	} else if (type == "string") {
 		return '"' + json.toString() + '"';
 	} else if (Array.isArray(json)) {
-		let ret = "[";
+		let ret = "[\n";
 		json.forEach((element) => {
-			ret += jsonToRuby(element);
-			ret += ", ";
+			ret += indent + "  ";
+			ret += jsonToRuby(element, indent + "  ");
+			ret += ",\n";
 		});
 		ret = ret.slice(0, -2);
-		ret += "]";
+		ret += "\n" + indent + "]";
 		return ret;
 	} else if (type == "object") {
 		let ret = "{\n";
 		for (var key in json) {
+			ret += indent + "  ";
 			ret += jsonToRuby(key);
 			ret += " => ";
-			ret += jsonToRuby(json[key]);
+			ret += jsonToRuby(json[key], indent + "  ");
 			ret += ",\n";
 		}
 		ret = ret.slice(0, -2);
-		ret += "\n}";
+		ret += "\n" + indent + "}";
 		return ret;
 	} else {
 		throw "Invalid JSON object";
