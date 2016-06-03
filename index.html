@@ -13,22 +13,25 @@
 			<h2>Instantly convert <a href="http://curl.haxx.se/">curl</a> commands to <a href="https://www.ruby-lang.org/">Ruby</a>'s <a href="http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/Net/HTTP.html">net/http</a></h2>
 
 			<p>
-				Ruby's <code>net/http</code> is notorious for having not the friendlyest API, but it isn't all that bad.
-				There are great libraries like <a href="https://github.com/lostisland/faraday">faraday</a>, but in libraries and small utilities it's better to reduce your dependencies and use what the stdlib provides.
+			     Ruby's <code>net/http</code> is notorious for not having the friendliest API, but it isn't all that bad.
+			     There are great libraries like <a href="https://github.com/lostisland/faraday">faraday</a>, but in libraries and small utilities it's better to reduce your dependencies and use what the stdlib provides.
 			</p>
 			<p>
-				This tool turns a curl command into ruby code using <code>net/http</code>. Currently, it knows the following options: <code>-d</code>/<code>--data</code>, <code>-H</code>/<code>--header</code>, <code>-I</code>/<code>--head</code>, <code>-u</code>/<code>--user</code>, <code>--url</code>, and <code>-X</code>/<code>--request</code>.
+			     This tool turns a curl command into ruby code using <code>net/http</code>. Currently, it knows the following options: <code>-d</code>/<code>--data</code>, <code>-H</code>/<code>--header</code>, <code>-I</code>/<code>--head</code>, <code>-u</code>/<code>--user</code>, <code>--url</code>, and <code>-X</code>/<code>--request</code>.
 			</p>
 			<p>
-				There's probably bugs; please <a href="https://github.com/jhawthorn/curl-to-ruby">contribute on GitHub</a>. Based on <a href="https://mholt.github.io/curl-to-go">curl-to-go</a>.
+			     Supports ruby 2.0+
+			</p>
+			<p>
+			     There's probably bugs; please <a href="https://github.com/jhawthorn/curl-to-ruby">contribute on GitHub</a>. Based on <a href="https://mholt.github.io/curl-to-go">curl-to-go</a>.
 			</p>
 
 			<p class="examples">
-				<a href="javascript: useExample('example1')">Example 1</a> &middot;
-				<a href="javascript: useExample('example2')">Example 2</a> &middot;
-				<a href="javascript: useExample('example3')">Example 3</a> &middot;
-				<a href="javascript: useExample('example4')">Example 4</a> &middot;
-				<a href="javascript: useExample('example5')">Example 5</a>
+			     <a href="javascript: useExample('example1')">Simple</a> &middot;
+			     <a href="javascript: useExample('example2')">Basic Auth</a> &middot;
+			     <a href="javascript: useExample('example3')">JSON</a> &middot;
+			     <a href="javascript: useExample('example4')">Complex JSON</a> &middot;
+			     <a href="javascript: useExample('example5')">Form Data</a>
 			</p>
 
 <script id="example1" language="text/x-shellscript">curl echoip.com</script>
@@ -41,7 +44,7 @@ curl https://api.example.com/surprise \
 curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer b7d03a6947b217efb6f3ec3bd3504582" -d '{"type":"A","name":"www","data":"162.10.66.0","priority":null,"port":null,"weight":null}' "https://api.digitalocean.com/v2/domains/example.com/records"
 </script>
 <script id="example4" language="text/x-shellscript">
-curl -u "demo" -X POST -d @file1.txt -d @file2.txt https://example.com/upload
+     curl -u "demo" -X POST -H "Content-Type: application/json" -d '{"array": [1,2,3], "object": {"foo": "bar", "nested": {"baz": true}}}' https://example.com/
 </script>
 <script id="example5" language="text/x-shellscript">
 curl -X POST https://api.easypost.com/v2/shipments \
