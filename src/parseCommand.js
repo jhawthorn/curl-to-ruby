@@ -31,7 +31,7 @@ export default function parseCommand(input, options) {
 	    let flagName = flag.substring(0, flag.indexOf('='));
 	    setFlag(flagName, flag.substring(flag.indexOf('=')+1, flag.length));
 	  } else {
-	    setFlag(flagName, argv.shift());
+	    setFlag(flag, argv.shift());
 	  }
 	}
       } else {

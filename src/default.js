@@ -17,6 +17,7 @@ function init() {
 	return coloredOutput.value;
       }
     } catch (e) {
+      console.log(e);
       return '<span class="clr-red">'+e+'</span>';
     }
   }
