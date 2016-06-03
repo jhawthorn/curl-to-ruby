@@ -45,19 +45,19 @@ class TestCurlToGo < Minitest::Test
   end
 
   def assert_curl_eq(path, curl_args="")
-    curl_req = capture_http do |url|
+    curl_req = normalize_request capture_http { |url|
       system "curl -s -o /dev/null #{url}#{path} #{curl_args}"
-    end
+    }
 
-    ruby_req = capture_http do |url|
+    ruby_req = normalize_request capture_http { |url|
       ruby = curl_to_ruby("curl #{url}#{path} #{curl_args}")
       eval(ruby)
-    end
+    }
 
     assert_equal curl_req.verb, ruby_req.verb
     assert_equal curl_req.path, ruby_req.path
     assert_equal curl_req.body, ruby_req.body
-    assert_equal normalize_headers(curl_req.headers), normalize_headers(ruby_req.headers)
+    assert_equal curl_req.headers, ruby_req.headers
   end
 
   Request = Struct.new(:verb, :path, :headers, :body)
@@ -66,13 +66,28 @@ class TestCurlToGo < Minitest::Test
     JS_CONTEXT.call("curlToRuby.default", cmd)
   end
 
-  def normalize_headers(headers)
-    headers = headers.dup
+  def normalize_request(original)
+    headers = original.headers.dup
     headers.delete("accept-encoding")
     headers.delete("user-agent")
     headers.delete("host")
     headers.delete("expect")
-    headers
+
+    if original.body
+      body = original.body
+      if headers['content-type'] == ['application/x-www-form-urlencoded']
+        # May encode slightly differently
+        body = URI.decode_www_form(body)
+        headers.delete("content-length")
+      end
+    end
+
+    Request.new(
+      original.verb,
+      original.path,
+      headers,
+      body
+    )
   end
 
   def capture_http

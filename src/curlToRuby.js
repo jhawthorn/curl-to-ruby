@@ -7,6 +7,8 @@
 	https://github.com/mholt/curl-to-go
 */
 
+import queryString from 'query-string';
+import jsonToRuby from './jsonToRuby';
 import parseCommand from "./parseCommand";
 
 export default function curlToRuby(curl) {
@@ -52,6 +54,8 @@ export default function curlToRuby(curl) {
 	 'TRACE':     'Trace',
 	 'UNLOCK':    'Unlock'
 	};
+
+	let formUrlEncodedRegex = /^([^\s]+=[^\s]+)(&[^\s]+=[^\s]+)*$/;
 
 	if (!curl.trim())
 		return;
@@ -120,8 +124,30 @@ export default function curlToRuby(curl) {
 			ruby += 'request["'+rubyEsc(name)+'"] = "'+rubyEsc(headers[name])+'"\n';
 		}
 
+		function isJson(json) {
+			try {
+				JSON.parse(json);
+				return true;
+			} catch (e) {
+				return false;
+			}
+		}
+
 		if (req.data.ascii) {
-			ruby += 'request.body = "' + rubyEsc(req.data.ascii) + '"\n';
+			if (isJson(req.data.ascii)) {
+				let json = JSON.parse(req.data.ascii);
+				ruby += "request.body = JSON.dump(\n" + jsonToRuby(json) + "\n)\n";
+			} else if (formUrlEncodedRegex.test(req.data.ascii)) {
+				let formData = queryString.parse(req.data.ascii);
+				ruby += "request.set_form_data(\n";
+				for(var name in formData) {
+					let value = formData[name];
+					ruby += `  "${rubyEsc(name)}" => "${rubyEsc(value)}",\n`
+				}
+				ruby += ")\n";
+			} else {
+				ruby += 'request.body = "' + rubyEsc(req.data.ascii) + '"\n';
+			}
 		}
 
 		if (req.data.files && req.data.files.length > 0) {
