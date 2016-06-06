@@ -1,41 +1,38 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>curl-to-ruby: Convert curl commands to ruby's net/http</title>
-		<meta charset="utf-8">
-		<link rel="stylesheet" href="resources/css/color-brewer.css">
-		<link rel="stylesheet" href="resources/css/common.css">
-	</head>
-	<body>
+  <head>
+    <title>curl-to-ruby: Convert curl commands to ruby's net/http</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="resources/css/color-brewer.css">
+    <link rel="stylesheet" href="resources/css/common.css">
+  </head>
+  <body>
 
-		<header>
-			<h1>curl-to-ruby</h1>
-			<h2>Instantly convert <a href="http://curl.haxx.se/">curl</a> commands to <a href="https://www.ruby-lang.org/">Ruby</a>'s <a href="http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/Net/HTTP.html">net/http</a></h2>
+    <header>
+      <h1>curl-to-ruby</h1>
+      <h2>Instantly convert <a href="http://curl.haxx.se/">curl</a> commands to <a href="https://www.ruby-lang.org/">Ruby</a>'s <a href="http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/Net/HTTP.html">net/http</a></h2>
 
-			<p>
-			     Ruby's <code>net/http</code> is notorious for not having the friendliest API, but it isn't all that bad.
-			     There are great libraries like <a href="https://github.com/lostisland/faraday">faraday</a>, but in libraries and small utilities it's better to reduce your dependencies and use what the stdlib provides.
-			</p>
-			<p>
-			     This tool turns a curl command into ruby code using <code>net/http</code>. Currently, it knows the following options: <code>-d</code>/<code>--data</code>, <code>-H</code>/<code>--header</code>, <code>-I</code>/<code>--head</code>, <code>-u</code>/<code>--user</code>, <code>--url</code>, and <code>-X</code>/<code>--request</code>.
-			</p>
-			<p>
-			     Supports ruby 2.0+
-			</p>
-			<p>
-			     There's probably bugs; please <a href="https://github.com/jhawthorn/curl-to-ruby">contribute on GitHub</a>. Based on <a href="https://mholt.github.io/curl-to-go">curl-to-go</a>.
-			</p>
+      <p>
+        Ruby's <code>net/http</code> is notorious for not having the friendliest API, but it isn't all that bad.
+        Ruby has great gems like <a href="https://github.com/lostisland/faraday">faraday</a>, but in libraries and small utilities it's better to <a href="http://www.mikeperham.com/2016/02/09/kill-your-dependencies/">kill your dependencies</a> and use what the stdlib provides.
+      </p>
+      <p>
+        This tool turns a curl command into ruby (2.0+) code using <code>net/http</code>. Currently, it knows the following options: <code>-d</code>/<code>--data</code>, <code>-H</code>/<code>--header</code>, <code>-I</code>/<code>--head</code>, <code>-u</code>/<code>--user</code>, <code>--url</code>, and <code>-X</code>/<code>--request</code>.
+      </p>
+      <p>
+        There's probably bugs; please <a href="https://github.com/jhawthorn/curl-to-ruby">contribute on GitHub</a>. Based on <a href="https://mholt.github.io/curl-to-go">curl-to-go</a>.
+      </p>
 
-			<p class="examples">
-			     <a href="javascript: useExample('example1')">Simple</a> &middot;
-			     <a href="javascript: useExample('example2')">Basic Auth</a> &middot;
-			     <a href="javascript: useExample('example3')">JSON</a> &middot;
-			     <a href="javascript: useExample('example4')">Complex JSON</a> &middot;
-			     <a href="javascript: useExample('example5')">Form Data</a>
-			</p>
+      <p class="examples">
+        <a href="javascript: useExample('example1')">Simple</a> &middot;
+        <a href="javascript: useExample('example2')">Basic Auth</a> &middot;
+        <a href="javascript: useExample('example3')">JSON</a> &middot;
+        <a href="javascript: useExample('example4')">Complex JSON</a> &middot;
+        <a href="javascript: useExample('example5')">Form Data</a>
+      </p>
 
-		</header>
-		<main>
+    </header>
+    <main>
 <script id="example1" language="text/x-shellscript">curl echoip.com</script>
 <script id="example2" language="text/x-shellscript">
 curl https://api.example.com/surprise \
@@ -58,9 +55,14 @@ curl -X POST https://api.easypost.com/v2/shipments \
      -d 'shipment[customs_info][id]=cstinfo_bl5sE20Y'
 </script>
 
-			<textarea id="input" rows="4" placeholder="Paste curl here"></textarea>
-			<div id="output"></div>
-		</main>
-	<script src="resources/js/default.js"></script>
-	</body>
+      <textarea id="input" rows="4" placeholder="Paste curl here"></textarea>
+      <div id="output"></div>
+    </main>
+    <footer>
+      <p>
+        Protip™: Both chrome and firefox allow <a href="https://daniel.haxx.se/blog/2015/11/23/copy-as-curl/">copying any request as curl</a>.
+      </p>
+    </footer>
+    <script src="resources/js/default.js"></script>
+  </body>
 </html>
