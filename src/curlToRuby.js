@@ -14,7 +14,7 @@ import parseCommand from "./parseCommand";
 export default function curlToRuby(curl) {
 	var prelude = "require 'net/http'\nrequire 'uri'\n\n";
 	var coda = "\n" +
-		"# response.status\n" +
+		"# response.code\n" +
 		"# response.body\n";
 
 	// List of curl flags that are boolean typed; this helps with parsing
