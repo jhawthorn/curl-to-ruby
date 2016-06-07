@@ -12,7 +12,7 @@ import jsonToRuby from './jsonToRuby';
 import parseCommand from "./parseCommand";
 
 export default function curlToRuby(curl) {
-	var prelude = "require 'net/http'\nrequire 'uri'\n\n";
+	var prelude = "require 'net/http'\nrequire 'uri'\n";
 	var coda = "\n" +
 		"# response.code\n" +
 		"# response.body\n";
@@ -77,11 +77,10 @@ export default function curlToRuby(curl) {
 	function renderSimple(req) {
 		var ruby = "";
 
-		ruby += prelude;
 		ruby += 'uri = URI.parse("' + rubyEsc(req.url) + '")\n';
 		ruby += 'response = Net::HTTP.get_response(uri)\n';
 
-		return ruby + coda;
+		return prelude + "\n" + ruby + coda;
 	}
 
 	// renderComplex renders Go code that requires making a http.Request.
@@ -100,7 +99,6 @@ export default function curlToRuby(curl) {
 
 		var ruby = "";
 
-		ruby += prelude;
 		ruby += 'uri = URI.parse("' + rubyEsc(req.url) + '")\n';
 
 		if (httpMethods[req.method]) {
@@ -136,6 +134,7 @@ export default function curlToRuby(curl) {
 		if (req.data.ascii) {
 			if (isJson(req.data.ascii)) {
 				let json = JSON.parse(req.data.ascii);
+				prelude += "require 'json'\n";
 				ruby += "request.body = JSON.dump(" + jsonToRuby(json) + ")\n";
 			} else if (formUrlEncodedRegex.test(req.data.ascii)) {
 				let formData = queryString.parse(req.data.ascii);
@@ -165,7 +164,7 @@ export default function curlToRuby(curl) {
 		ruby += '  http.request(request)\n'
 		ruby += 'end\n'
 
-		return ruby + coda;
+		return prelude + "\n" + ruby + coda;
 	}
 
 	// extractRelevantPieces returns an object with relevant pieces
