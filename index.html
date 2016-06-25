@@ -43,7 +43,7 @@ curl https://api.example.com/surprise \
 curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer b7d03a6947b217efb6f3ec3bd3504582" -d '{"type":"A","name":"www","data":"162.10.66.0","priority":null,"port":null,"weight":null}' "https://api.digitalocean.com/v2/domains/example.com/records"
 </script>
 <script id="example4" language="text/x-shellscript">
-     curl -u "demo" -X POST -H "Content-Type: application/json" -d '{"array": [1,2,3], "object": {"foo": "bar", "nested": {"baz": true}}}' https://example.com/
+     curl -u "demo:" -X POST -H "Content-Type: application/json" -d '{"array": [1,2,3], "object": {"foo": "bar", "nested": {"baz": true}}}' https://example.com/
 </script>
 <script id="example5" language="text/x-shellscript">
 curl -X POST https://api.easypost.com/v2/shipments \
