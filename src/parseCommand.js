@@ -20,6 +20,12 @@ export default function parseCommand(input, options) {
 
   while(argv.length) {
     let flag = argv.shift();
+
+    /* Assume globs are typos/missing qutotes/shell-quote sillyness w */
+    if (flag.op == 'glob') {
+      flag = flag.pattern;
+    }
+
     if (flag[0] == '-'){
       flag = flag.substring(1, flag.length);
       if (flag[0] == '-') { /* long argument */

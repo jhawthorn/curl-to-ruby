@@ -44,6 +44,12 @@ class TestCurlToGo < Minitest::Test
     assert_curl_eq "/", "-d @README.md"
   end
 
+  def test_query_string
+    assert_curl_eq "/curl-to-ruby/?foo=bar", "-d @README.md"
+  end
+
+  private
+
   def assert_curl_eq(path, curl_args="")
     curl_req = normalize_request capture_http { |url|
       system "curl -s -o /dev/null #{url}#{path} #{curl_args}"
