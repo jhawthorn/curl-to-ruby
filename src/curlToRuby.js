@@ -66,7 +66,7 @@ export default function curlToRuby(curl) {
 
 	var req = extractRelevantPieces(cmd);
 
-	if (req.headers.length == 0 && req.method == "GET" && !req.data.ascii && !req.data.files && !req.basicauth) {
+	if (isSimple(req)) {
 		return renderSimple(req);
 	} else {
 	 	return renderComplex(req);
@@ -160,7 +160,16 @@ export default function curlToRuby(curl) {
 		}
 
 		ruby += '\n'
-		ruby += 'response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == "https") do |http|\n'
+		ruby += 'req_options = {\n'
+		ruby += '  use_ssl: uri.scheme == "https",\n'
+		if (req.insecure) {
+		prelude += "require 'openssl'\n"
+		ruby += '  verify_mode: OpenSSL::SSL::VERIFY_NONE,\n'
+		}
+		ruby += '}\n'
+
+		ruby += '\n'
+		ruby += 'response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|\n'
 		ruby += '  http.request(request)\n'
 		ruby += 'end\n'
 
@@ -244,6 +253,10 @@ export default function curlToRuby(curl) {
 			relevant.basicAuth = { user: basicAuthString, pass: "<PASSWORD>" };
 		}
 
+		if (cmd.k || cmd.insecure) {
+			relevant.insecure = true;
+		}
+
 		// default to GET if nothing else specified
 		if (!relevant.method)
 			relevant.method = "GET";
@@ -267,5 +280,14 @@ export default function curlToRuby(curl) {
 
 	function rubyEsc(s) {
 		return s.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+	}
+
+	function isSimple() {
+		return req.headers.length == 0 && 
+			req.method == "GET" && 
+			!req.data.ascii && 
+			!req.data.files && 
+			!req.basicauth &&
+			!req.insecure;
 	}
 }
