@@ -1,1 +1,1 @@
-require("expose?curlToRuby!./curlToRuby");
+require("expose-loader?curlToRuby!./curlToRuby");

@@ -5,7 +5,7 @@
   "description": "curl-to-ruby ============",
   "scripts": {
     "watch": "webpack --watch --colors --progress --display-error-details",
-    "compile": "webpack --no-colors --optimize-minimize --optimize-dedupe --optimize-occurence-order --display-error-details",
+    "compile": "webpack --no-colors -p --display-error-details",
     "eslint": "eslint src"
   },
   "repository": {
@@ -20,16 +20,16 @@
   "homepage": "https://github.com/jhawthorn/curl-to-ruby#readme",
   "dependencies": {
     "babel-core": "^6.9.0",
-    "babel-loader": "^6.2.4",
+    "babel-loader": "^7.1.2",
     "babel-polyfill": "^6.9.0",
     "babel-preset-es2015": "^6.9.0",
     "highlight.js": "^9.4.0",
-    "query-string": "^4.1.0",
+    "query-string": "^5.0.1",
     "shell-quote": "^1.6.0",
-    "webpack": "^1.13.1"
+    "webpack": "^3.8.1"
   },
   "devDependencies": {
-    "babel-eslint": "^6.0.4",
+    "babel-eslint": "^8.0.2",
     "expose-loader": "^0.7.1"
   }
 }
