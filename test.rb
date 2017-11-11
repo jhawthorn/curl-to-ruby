@@ -62,7 +62,11 @@ class TestCurlToGo < Minitest::Test
 
     assert_equal curl_req.verb, ruby_req.verb
     assert_equal curl_req.path, ruby_req.path
-    assert_equal curl_req.body, ruby_req.body
+    if curl_req.body.nil?
+      assert_nil ruby_req.body
+    else
+      assert_equal curl_req.body, ruby_req.body
+    end
     assert_equal curl_req.headers, ruby_req.headers
   end
 
