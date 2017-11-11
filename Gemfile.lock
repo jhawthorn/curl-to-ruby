@@ -1,23 +1,24 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    coderay (1.1.1)
+    coderay (1.1.2)
     execjs (2.7.0)
-    method_source (0.8.2)
-    minitest (5.9.0)
-    pry (0.10.3)
+    execjs-fastnode (0.2.1)
+      execjs (~> 2.0)
+    method_source (0.9.0)
+    minitest (5.10.3)
+    pry (0.11.2)
       coderay (~> 1.1.0)
-      method_source (~> 0.8.1)
-      slop (~> 3.4)
-    slop (3.6.0)
+      method_source (~> 0.9.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   execjs
+  execjs-fastnode
   minitest
   pry
 
 BUNDLED WITH
-   1.12.3
+   1.16.0
