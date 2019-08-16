@@ -19,17 +19,17 @@
   },
   "homepage": "https://github.com/jhawthorn/curl-to-ruby#readme",
   "dependencies": {
-    "babel-core": "^6.9.0",
-    "babel-loader": "^7.1.2",
-    "babel-polyfill": "^6.9.0",
-    "babel-preset-env": "^1.6.1",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "babel-loader": "^8.0.6",
     "highlight.js": "^9.4.0",
-    "query-string": "^5.0.1",
+    "query-string": "^6.8.2",
     "shell-quote": "^1.6.0",
-    "webpack": "^3.8.1"
+    "webpack": "^4.39.2"
   },
   "devDependencies": {
-    "babel-eslint": "^8.0.2",
-    "expose-loader": "^0.7.1"
+    "babel-eslint": "^10.0.2",
+    "expose-loader": "^0.7.1",
+    "webpack-cli": "^3.3.6"
   }
 }

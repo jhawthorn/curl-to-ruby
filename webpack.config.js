@@ -15,17 +15,15 @@ module.exports = {
   },
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: "babel-loader",
-        options: {
-          presets: [
-            ['env', {
-              "targets": { "browsers": "> 3% in US" }
-            }]
-          ]
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
         }
       }
     ]
