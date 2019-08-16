@@ -1,8 +1,6 @@
 curl-to-ruby
 ============
 
-[![Build Status](https://travis-ci.org/jhawthorn/curl-to-ruby.svg?branch=gh-pages)](https://travis-ci.org/jhawthorn/curl-to-ruby)
-
 curl-to-ruby is a tool to instantly convert [curl](http://curl.haxx.se) commands to ruby code using [net/http](http://ruby-doc.org/stdlib-2.1.1/libdoc/net/http/rdoc/Net/HTTP.html) in the browser. It does *not* guarantee high-fidelity conversions, but it's good enough for most API docs that have curl samples.
 
 ### Try it
