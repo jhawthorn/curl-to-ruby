@@ -22,7 +22,7 @@
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "babel-loader": "^8.0.6",
-    "highlight.js": "^9.4.0",
+    "highlight.js": "^10.4.1",
     "query-string": "^6.8.2",
     "shell-quote": "^1.6.0",
     "webpack": "^4.39.2"
